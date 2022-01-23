@@ -1,0 +1,24 @@
+type TransferTx @entity {
+
+  id: ID! #blockheight-idx
+
+  from: String! @index
+
+  to: String! @index
+
+  amount: String!
+
+  blockHeight: Int! @index
+
+  timestamp: Date!
+
+}
+
+type TotalReceive @entity {
+  # record the account total received at blockHeight block height
+  id: ID! # account address
+
+  amount: String!
+
+  blockHeight: Int! @index
+}
