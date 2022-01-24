@@ -22,6 +22,7 @@ function isClaim(to: string): boolean {
 }
 
 async function handleTotalClaimed(to: string, amount: string, block: number): Promise<void> {
+    logger.info(`handle total claim to[${to}] amount[${amount}] at block[${block}]`)
     try {
         let record = await TotalClaim.get(to)
         if (record === undefined) {
@@ -30,7 +31,6 @@ async function handleTotalClaimed(to: string, amount: string, block: number): Pr
                 amount: "0"
             })
         }
-        logger.warn("claim record: %o", record)
         record.amount = (BigInt(record.amount) + BigInt(amount)).toString()
         record.blockHeight = block
         await record.save()
@@ -41,6 +41,7 @@ async function handleTotalClaimed(to: string, amount: string, block: number): Pr
 }
 
 async function handleDistribution(tx: Tx): Promise<void> {
+    logger.info(`handle new distribution from[${tx.from}] to[${tx.to}] amount[${tx.amount}]`)
     try {
         let record = await DistributionTx.get(tx.id)
         if (record !== undefined) {
@@ -56,6 +57,7 @@ async function handleDistribution(tx: Tx): Promise<void> {
 }
 
 async function handleClaim(tx: Tx): Promise<void> {
+    logger.info(`handle new claim from[${tx.from}] to[${tx.to}] amount[${tx.amount}]`)
     try {
         let record = await ClaimTx.get(tx.id)
         if (record !== undefined) {
