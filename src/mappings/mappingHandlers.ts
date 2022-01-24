@@ -1,81 +1,101 @@
 
 import { SubstrateEvent } from "@subql/types";
-import { TransferTx, TotalReceive } from "../types";
+import { DistributionTx, ClaimTx, TotalClaim } from "../types";
+import { DISTRIBUTION, CLAIMS } from "./accounts";
 
-import { MAIN_ACCOUNT, SUB_ACCOUNTS } from "./accounts";
-
-function isMainAccount(account: string): boolean {
-    return MAIN_ACCOUNT === account
+type Tx = {
+    id: string, // tx hash
+    from: string,
+    to: string,
+    amount: string,
+    blockHeight: number,
+    timestamp: Date
 }
 
-function isSubAccount(account: string): boolean {
-    return SUB_ACCOUNTS.includes(account)
+function isDistribution(from: string): boolean {
+    return DISTRIBUTION === from
 }
 
-function isMainReceive(to: string): boolean {
-    return isMainAccount(to)
+function isClaim(from: string): boolean {
+    return CLAIMS.includes(from)
 }
 
-
-async function handleReceive(to: string, amount: string, block: number): Promise<void> {
+async function handleTotalClaimed(to: string, amount: string, block: number): Promise<void> {
     try {
-        let record = await TotalReceive.get(to)
+        let record = await TotalClaim.get(to)
         if (record === undefined) {
-            record = TotalReceive.create({
+            record = TotalClaim.create({
                 id: to,
                 amount: "0"
             })
         }
+        logger.warn("claim record: %o", record)
         record.amount = (BigInt(record.amount) + BigInt(amount)).toString()
         record.blockHeight = block
         await record.save()
     } catch (e: any) {
-        logger.error(`handle account[${to}] received sumarize error: %o`, e)
+        logger.error(`handle account[${to}] total claim error: %o`, e)
+        throw e
+    }
+}
+
+async function handleDistribution(tx: Tx): Promise<void> {
+    try {
+        let record = await DistributionTx.get(tx.id)
+        if (record !== undefined) {
+            logger.warn(`distribution hash [${tx.id}] has been recorded`)
+            return
+        }
+        record = DistributionTx.create(tx)
+        record.save()
+    } catch (e: any) {
+        logger.error("handle acala distribution error: %o", e)
+        throw e
+    }
+}
+
+async function handleClaim(tx: Tx): Promise<void> {
+    try {
+        let record = await ClaimTx.get(tx.id)
+        if (record !== undefined) {
+            logger.warn(`claim hash [${tx.id}] has been recorded`)
+            return
+        }
+        record = ClaimTx.create(tx)
+        await Promise.all([
+            record.save(),
+            handleTotalClaimed(tx.to, tx.amount, tx.blockHeight)
+        ])
+    } catch (e: any) {
+        logger.error("handle acala claim error: %o", e)
         throw e
     }
 }
 
 export async function handleTransferEvent(event: SubstrateEvent): Promise<void> {
-    //Retrieve the record by its ID
+    const { event: { data: [signer, to, value] } } = event;
+    const from = signer.toString()
 
-    const { event: { data: [from, to, value] } } = event;
-    const from_str = from.toString()
-    const to_str = to.toString()
-    const val_str = value.toString()
+    const isDistri = isDistribution(from)
+    const isCla = isClaim(from)
 
-    if (!isMainAccount(from_str) && !isSubAccount(from_str)) {
-        return
+    // filter signer we don't care
+    if (!isDistri && !isCla) { 
+        // logger.warn(`ignore event: from[${from}] to[${to.toString()}]`)
+        return 
     }
-
-    const extHash = event.extrinsic.extrinsic.hash.toString()
-
-    try {
-        let record = await TransferTx.get(extHash)
-        if (record !== undefined) {
-            logger.warn(`extrinsic hash [${extHash}] has been recorded`)
-            return
-        }
-        const blockHeight = event.block.block.header.number.toNumber()
-        record = TransferTx.create({
-            id: extHash,
-            from: from_str,
-            to: to_str,
-            amount: val_str,
-            blockHeight,
-            timestamp: event.block.timestamp
-        })
-
-        if (isMainReceive(to_str)) {
-            await Promise.all([
-                handleReceive(to_str, val_str, blockHeight),
-                record.save()
-            ])
-        } else {
-            await record.save()
-        }
-
-    } catch (e: any) {
-        logger.error("handle transfer event error: %o", e)
+    const tx: Tx = {
+        id: event.extrinsic.extrinsic.hash.toString(),
+        from,
+        to: to.toString(),
+        amount: value.toString(),
+        blockHeight: event.block.block.header.number.toNumber(),
+        timestamp: event.block.timestamp
+    }
+    if (isDistri) {
+        await handleDistribution(tx)
+    } else if (isCla) {
+        await handleClaim(tx)
     }
 }
 

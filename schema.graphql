@@ -1,6 +1,21 @@
-type TransferTx @entity {
+type DistributionTx @entity {
 
-  id: ID! #blockheight-idx
+  id: ID! # extrinsic hash
+
+  from: String! @index
+
+  to: String! @index
+
+  amount: String!
+
+  blockHeight: Int! @index
+
+  timestamp: Date!
+}
+
+type ClaimTx @entity {
+
+  id: ID! # extrinsic hash
 
   from: String! @index
 
@@ -14,9 +29,9 @@ type TransferTx @entity {
 
 }
 
-type TotalReceive @entity {
-  # record the account total received at blockHeight block height
-  id: ID! # account address
+type TotalClaim @entity {
+  # record the main account total received from claimers
+  id: ID! # distribution account address
 
   amount: String!
 

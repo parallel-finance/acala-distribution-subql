@@ -6,13 +6,16 @@ repository: ''
 schema:
   file: ./schema.graphql
 network:
-  endpoint: wss://node-6870830370282213376.rz.onfinality.io/ws?apikey=0f273197-e4d5-45e2-b23e-03b015cb7000  # test
-  genesisHash: '0x5c562e6300954998233c9a40b6b86f3028977e6d32d0da1af207738d19f98c1b' # test
+  # endpoint: wss://node-6870830370282213376.rz.onfinality.io/ws?apikey=0f273197-e4d5-45e2-b23e-03b015cb7000  # test
+  # genesisHash: '0x5c562e6300954998233c9a40b6b86f3028977e6d32d0da1af207738d19f98c1b' # test
+  endpoint: wss://regnet-rpc.parallel.fi  # regenet
+  genesisHash: '0xa9c3b437a314688da50e4330b567cf6fea14e5b7b72099b4f81a8100a6fccd0f' # regnet
   # endpoint: wss://acala-polkadot.api.onfinality.io/public-ws  # deploy
   # genesisHash: '0xfc41b9bd8ef8fe53d58c7ea67c794c7ec9a73daf05e6d54b14ff6342c99ba64c' # deploy
 dataSources:
   - kind: substrate/Runtime
-    startBlock: 348696  # test
+    # startBlock: 348696  # test
+    startBlock: 8000 # regnet
     # startBlock: 252520  # deploy
     mapping:
       file: ./dist/index.js
