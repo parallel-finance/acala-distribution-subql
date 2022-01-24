@@ -16,8 +16,9 @@ function isDistribution(from: string): boolean {
     return DISTRIBUTION === from
 }
 
-function isClaim(from: string): boolean {
-    return CLAIMS.includes(from)
+function isClaim(to: string): boolean {
+    return DISTRIBUTION === to
+    // return CLAIMS.includes(from)
 }
 
 async function handleTotalClaimed(to: string, amount: string, block: number): Promise<void> {
@@ -73,11 +74,11 @@ async function handleClaim(tx: Tx): Promise<void> {
 }
 
 export async function handleTransferEvent(event: SubstrateEvent): Promise<void> {
-    const { event: { data: [signer, to, value] } } = event;
+    const { event: { data: [signer, dest, value] } } = event;
     const from = signer.toString()
-
+    const to = dest.toString()
     const isDistri = isDistribution(from)
-    const isCla = isClaim(from)
+    const isCla = isClaim(to)
 
     // filter signer we don't care
     if (!isDistri && !isCla) { 
@@ -87,7 +88,7 @@ export async function handleTransferEvent(event: SubstrateEvent): Promise<void> 
     const tx: Tx = {
         id: event.extrinsic.extrinsic.hash.toString(),
         from,
-        to: to.toString(),
+        to,
         amount: value.toString(),
         blockHeight: event.block.block.header.number.toNumber(),
         timestamp: event.block.timestamp
