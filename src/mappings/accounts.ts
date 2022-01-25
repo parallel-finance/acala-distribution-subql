@@ -6,9 +6,12 @@
 //     "5DPMn2hJW8FWVcUGy1QYCc1UjpB6fhiy3jfC7TdL927xLDaB"
 // ]
 
-export const DISTRIBUTION: string = "hJFXj2yn2ancA16haF1zTzcVysGGw3Bo4ZaqbnMGLSTR9U5aP"
+export const DISTRIBUTION: string = "5GF5ncvNrGY6DQTxTiHH54A7Zyx6172X2BguN9jtc3hujPgR"
 export const CLAIMS: string[] = [
-    "hJFFqkBAzBkf76eb4HyfTbHRERqYv6kW7RzUgVNyt7JBdK4oD"
+    "1Gu7GSgLSPrhc1Wci9wAGP6nvzQfaUCYqbfXxjYjMG9bob6",
+    "13wNbioJt44NKrcQ5ZUrshJqP7TKzQbzZt5nhkeL4joa3PAX",
+    "12of6J5x9TyCo1qFn96ZFBqKTZd3Su6Ugy6qZbfRfyv3ktSU",
+    "5FZBmoDMD81QKztNWxywr24TC7VQJTLWcyVTTAJMXc9cutQ9"
 ]
 
 // export function getDistribution(): string {

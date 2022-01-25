@@ -1,7 +1,7 @@
 
 import { SubstrateEvent } from "@subql/types";
 import { DistributionTx, ClaimTx, TotalClaim } from "../types";
-import { DISTRIBUTION, CLAIMS } from "./accounts";
+import { DISTRIBUTION } from "./accounts";
 
 type Tx = {
     id: string, // tx hash
