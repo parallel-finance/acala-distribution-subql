@@ -32,10 +32,11 @@ services:
     command:
       - -f=/app
       - --db-schema=app
+      - --force-clean
     healthcheck:
       test: ["CMD", "curl", "-f", "http://subquery-node:3000/ready"]
       interval: 3s
-      timeout: 5s
+      timeout: 15s
       retries: 10
 
   graphql-engine:
