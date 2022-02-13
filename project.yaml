@@ -16,7 +16,7 @@ dataSources:
   - kind: substrate/Runtime
     # startBlock: 348696  # test
     # startBlock: 8000 # regnet
-    startBlock: 265000  # deploy
+    startBlock: 265500  # deploy
     mapping:
       file: ./dist/index.js
       handlers:
