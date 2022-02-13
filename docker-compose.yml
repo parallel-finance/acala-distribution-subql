@@ -3,6 +3,7 @@ version: "3"
 services:
   postgres:
     image: postgres:14
+    container_name: postgres14
     ports:
       - 5432:5432
     volumes:
@@ -16,7 +17,8 @@ services:
       retries: 5
 
   subquery-node:
-    image: onfinality/subql-node:latest
+    image: onfinality/subql-node:v0.27.2
+    container_name: subql-node-0272
     depends_on:
       "postgres":
         condition: service_healthy
@@ -39,7 +41,8 @@ services:
       retries: 10
 
   graphql-engine:
-    image: onfinality/subql-query:latest
+    image: onfinality/subql-query:v0.11.0
+    container_name: subql-0110
     ports:
       - 3000:3000
     depends_on:
