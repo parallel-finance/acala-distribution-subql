@@ -6,7 +6,7 @@
 //     "5DPMn2hJW8FWVcUGy1QYCc1UjpB6fhiy3jfC7TdL927xLDaB"
 // ]
 
-export const DISTRIBUTION: string = "5GF5ncvNrGY6DQTxTiHH54A7Zyx6172X2BguN9jtc3hujPgR"
+export const DISTRIBUTION: string = "253yWsbUYxYqDXX7Ug8WzDeWtTNgFEsrz5xhgHAFnggJj4Pm"
 export const CLAIMS: string[] = [
     "1Gu7GSgLSPrhc1Wci9wAGP6nvzQfaUCYqbfXxjYjMG9bob6",
     "13wNbioJt44NKrcQ5ZUrshJqP7TKzQbzZt5nhkeL4joa3PAX",
