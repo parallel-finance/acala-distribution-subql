@@ -37,3 +37,12 @@ type TotalClaim @entity {
 
   blockHeight: Int! @index
 }
+
+type TotalDistribution @entity {
+  # record the main account total received from claimers
+  id: ID! # distribution account address
+
+  amount: String!
+
+  blockHeight: Int! @index
+}

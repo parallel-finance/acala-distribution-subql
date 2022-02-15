@@ -1,6 +1,6 @@
 
 import { SubstrateEvent } from "@subql/types";
-import { DistributionTx, ClaimTx, TotalClaim } from "../types";
+import { DistributionTx, ClaimTx, TotalClaim, TotalDistribution } from "../types";
 import { DISTRIBUTION } from "./accounts";
 
 type Tx = {
@@ -22,7 +22,7 @@ function isClaim(to: string): boolean {
 }
 
 async function handleTotalClaimed(to: string, amount: string, block: number): Promise<void> {
-    logger.info(`handle total claim to[${to}] amount[${amount}] at block[${block}]`)
+    logger.info(`handle total claim from[${to}] amount[${amount}] at block[${block}]`)
     try {
         let record = await TotalClaim.get(to)
         if (record === undefined) {
@@ -40,8 +40,27 @@ async function handleTotalClaimed(to: string, amount: string, block: number): Pr
     }
 }
 
+async function handleTotalDistributed(from: string, amount: string, block: number): Promise<void> {
+    logger.info(`handle total distribution to[${from}] amount[${amount}] at block[${block}]`)
+    try {
+        let record = await TotalDistribution.get(from)
+        if (record === undefined) {
+            record = TotalDistribution.create({
+                id: from,
+                amount: "0",
+                blockHeight: block
+            })
+        }
+        record.amount = (BigInt(record.amount) + BigInt(amount)).toString()
+        await record.save()
+    } catch (e: any) {
+        logger.error(`handle account[${from}] total distribution error: %o`, e)
+        throw e
+    }
+}
+
 async function handleDistribution(tx: Tx): Promise<void> {
-    logger.info(`handle new distribution from[${tx.from}] to[${tx.to}] amount[${tx.amount}]`)
+    // logger.info(`handle new distribution from[${tx.from}] to[${tx.to}] amount[${tx.amount}]`)
     try {
         let record = await DistributionTx.get(tx.id)
         if (record !== undefined) {
@@ -49,7 +68,10 @@ async function handleDistribution(tx: Tx): Promise<void> {
             return
         }
         record = DistributionTx.create(tx)
-        record.save()
+        await Promise.all([
+            record.save(),
+            handleTotalDistributed(tx.from, tx.amount, tx.blockHeight)
+        ])
     } catch (e: any) {
         logger.error("handle acala distribution error: %o", e)
         throw e
@@ -57,7 +79,7 @@ async function handleDistribution(tx: Tx): Promise<void> {
 }
 
 async function handleClaim(tx: Tx): Promise<void> {
-    logger.info(`handle new claim from[${tx.from}] to[${tx.to}] amount[${tx.amount}]`)
+    logger.info(`handle new claim from[${tx.from}] to[${tx.to}] amount[${tx.amount}] at ${tx.id}`)
     try {
         let record = await ClaimTx.get(tx.id)
         if (record !== undefined) {
@@ -82,17 +104,20 @@ export async function handleTransferEvent(event: SubstrateEvent): Promise<void> 
     const isDistri = isDistribution(from)
     const isCla = isClaim(to)
 
+    const idx = event.idx
+    const blockHeight = event.block.block.header.number.toNumber()
+    const hash = event.extrinsic.extrinsic.hash.toString()
     // filter signer we don't care
     if (!isDistri && !isCla) { 
         // logger.warn(`ignore event: from[${from}] to[${to.toString()}]`)
         return 
     }
     const tx: Tx = {
-        id: event.extrinsic.extrinsic.hash.toString(),
+        id: `${hash}-${idx}`,
         from,
         to,
         amount: value.toString(),
-        blockHeight: event.block.block.header.number.toNumber(),
+        blockHeight,
         timestamp: event.block.timestamp
     }
     if (isDistri) {
