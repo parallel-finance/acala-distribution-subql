@@ -98,32 +98,38 @@ async function handleClaim(tx: Tx): Promise<void> {
 }
 
 export async function handleTransferEvent(event: SubstrateEvent): Promise<void> {
-    const { event: { data: [signer, dest, value] } } = event;
-    const from = signer.toString()
-    const to = dest.toString()
-    const isDistri = isDistribution(from)
-    const isCla = isClaim(to)
+    try {
+        const { event: { data: [signer, dest, value] } } = event;
+        const from = signer.toString()
+        const to = dest.toString()
+        const isDistri = isDistribution(from)
+        const isCla = isClaim(to)
+        
+        // filter signer we don't care
+        if (!isDistri && !isCla) {
+            // logger.warn(`ignore event: from[${from}] to[${to.toString()}]`)
+            return
+        }
+        
+        const idx = event.idx
+        const blockHeight = event.block.block.header.number.toNumber()
+        const hash = event.extrinsic.extrinsic.hash.toString()
 
-    const idx = event.idx
-    const blockHeight = event.block.block.header.number.toNumber()
-    const hash = event.extrinsic.extrinsic.hash.toString()
-    // filter signer we don't care
-    if (!isDistri && !isCla) { 
-        // logger.warn(`ignore event: from[${from}] to[${to.toString()}]`)
-        return 
-    }
-    const tx: Tx = {
-        id: `${hash}-${idx}`,
-        from,
-        to,
-        amount: value.toString(),
-        blockHeight,
-        timestamp: event.block.timestamp
-    }
-    if (isDistri) {
-        await handleDistribution(tx)
-    } else if (isCla) {
-        await handleClaim(tx)
+        const tx: Tx = {
+            id: `${hash}-${idx}`,
+            from,
+            to,
+            amount: value.toString(),
+            blockHeight,
+            timestamp: event.block.timestamp
+        }
+        if (isDistri) {
+            await handleDistribution(tx)
+        } else if (isCla) {
+            await handleClaim(tx)
+        }
+    } catch (e: any) {
+        logger.error(`handle transfer event error: %o`, e)
     }
 }
 
