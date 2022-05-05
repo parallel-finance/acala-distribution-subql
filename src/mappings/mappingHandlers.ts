@@ -27,11 +27,11 @@ async function handleTotalClaimed(to: string, amount: string, block: number): Pr
         if (record === undefined) {
             record = TotalClaim.create({
                 id: to,
-                amount: "0"
+                amount: "0",
+                blockHeight: block
             })
         }
         record.amount = (BigInt(record.amount) + BigInt(amount)).toString()
-        record.blockHeight = block
         await record.save()
     } catch (e: any) {
         logger.error(`handle account[${to}] total claim error: %o`, e)
