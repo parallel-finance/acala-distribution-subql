@@ -67,3 +67,5 @@ Go To subQuery project page, click Deploy button for staging slot and enter the 
 
 - Acala: https://project.subquery.network/project/parallel-finance/acala-distribution-subql
 - Acala (test blockchain): https://project.subquery.network/project/parallel-finance/acala-distribute-subql-staging
+
+**Note: Please use staging branch to deploy Acala staging env.**
