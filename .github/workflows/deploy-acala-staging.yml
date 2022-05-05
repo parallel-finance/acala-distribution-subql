@@ -30,6 +30,6 @@ jobs:
         run: yarn codegen
 
       - name: Publish to IPFS
-        run: yarn ipfs:publish -f deploy-acala-staging.yaml
+        run: yarn ipfs:publish -f acala-staging.yaml
         env:
           SUBQL_ACCESS_TOKEN: ${{ github.event.inputs.subqlAccessToken }}
