@@ -85,8 +85,11 @@ export async function handleTransferEvent(event: SubstrateEvent): Promise<void> 
         // logger.warn(`ignore event: from[${from}] to[${to.toString()}]`)
         return 
     }
+    
+    const idx = event.idx
+    const hash = event.extrinsic.extrinsic.hash.toString()
     const tx: Tx = {
-        id: event.extrinsic.extrinsic.hash.toString(),
+        id: `${hash}-${idx}`,
         from,
         to,
         amount: value.toString(),
