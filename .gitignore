@@ -7,10 +7,8 @@
 node_modules/
 dist/
 .data
-.github
 
 # lock files
-yarn.lock
 package-lock.json
 
 # Compiled Java class files
@@ -27,7 +25,6 @@ package-lock.json
 
 # Maven
 target/
-dist/
 src/types
 
 # JetBrains IDE
