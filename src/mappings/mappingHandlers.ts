@@ -1,7 +1,7 @@
-
 import { SubstrateEvent } from "@subql/types";
 import { DistributionTx, ClaimTx, TotalClaim, TotalDistribution } from "../types";
-import { DISTRIBUTION } from "./accounts";
+
+export const DISTRIBUTION: string = "okx42cFPQyREbsr4ZhdZeFwzRikwCDHBmajM3k9MpW4Tpg8"
 
 type Tx = {
     id: string, // tx hash
@@ -18,7 +18,6 @@ function isDistribution(from: string): boolean {
 
 function isClaim(to: string): boolean {
     return DISTRIBUTION === to
-    // return CLAIMS.includes(from)
 }
 
 async function handleTotalClaimed(to: string, amount: string, block: number): Promise<void> {

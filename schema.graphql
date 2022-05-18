@@ -29,8 +29,8 @@ type ClaimTx @entity {
 
 }
 
+# record the main account total received from claimers
 type TotalClaim @entity {
-  # record the main account total received from claimers
   id: ID! # distribution account address
 
   amount: String!
@@ -38,8 +38,8 @@ type TotalClaim @entity {
   blockHeight: Int! @index
 }
 
+# record the main account total received from claimers
 type TotalDistribution @entity {
-  # record the main account total received from claimers
   id: ID! # distribution account address
 
   amount: String!
