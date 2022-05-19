@@ -1,7 +1,7 @@
 import { SubstrateEvent } from "@subql/types";
 import { DistributionTx, ClaimTx, TotalClaim, TotalDistribution } from "../types";
 
-export const DISTRIBUTION: string = "okx42cFPQyREbsr4ZhdZeFwzRikwCDHBmajM3k9MpW4Tpg8"
+export const DISTRIBUTION: string = "0x99Ae955aB2a012f0a6605C0359049bf33e5152f0"
 
 type Tx = {
     id: string, // tx hash

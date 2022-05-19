@@ -1,0 +1,29 @@
+specVersion: 1.0.0
+name: moonbeam-distribute-subql-staging
+version: 1.0.0
+description: A subql project for distributing moonbeam rewards
+repository: https://github.com/parallel-finance/acala-distribution-subql
+runner:
+  node:
+    name: '@subql/node'
+    version: '0.33.0'
+  query:
+    name: '@subql/query'
+    version: '^0.12.0'
+schema:
+  file: ./schema.graphql
+network:
+  endpoint: wss://dis-moonbeam-wss.parallel.fi
+  genesisHash: '0x51fd65101a9170863f5d0e9a4355ecc5c04f15328cdbb1468be43523fbdfb4b9'
+  dictionary: 'https://api.subquery.network/sq/subquery/parallel-heiko-dictionary'
+dataSources:
+  - kind: substrate/Runtime
+    startBlock: 1
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        - handler: handleTransferEvent
+          kind: substrate/EventHandler
+          filter:
+            module: balances
+            method: Transfer
