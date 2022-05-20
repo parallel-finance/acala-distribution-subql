@@ -14,7 +14,7 @@ schema:
   file: ./schema.graphql
 network:
   endpoint: wss://dis-acala-wss.parallel.fi
-  genesisHash: '0x085e56e222de655882ceb8b7492f70f8b9b69d2b6ed8f19e22d6f067a79b1d41'
+  genesisHash: '0xa842f92109df2ae30b36bf51f7fb4393fbb9276630f8797b71b895f0e6393cd2'
   dictionary: 'https://api.subquery.network/sq/subquery/parallel-heiko-dictionary'
 dataSources:
   - kind: substrate/Runtime
