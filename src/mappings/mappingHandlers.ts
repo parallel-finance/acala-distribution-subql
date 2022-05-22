@@ -7,7 +7,7 @@ import {
 } from "../types";
 
 export const DISTRIBUTION: string =
-  "0x323B10Ecf35F287B1dcfe48976cE1078BDA738d0";
+  "0x1F695652967615cdE319FDF59dD65B22c380EDC1";
 
 type Tx = {
   id: string; // tx hash
