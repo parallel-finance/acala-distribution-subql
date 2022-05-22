@@ -1,4 +1,4 @@
-name: Deploy with Moonbeam RPC (staging)
+name: Deploy with Moonbeam RPC
 
 on:
   workflow_dispatch:
@@ -33,4 +33,3 @@ jobs:
         run: yarn ipfs:publish -f moonbeam.yaml
         env:
           SUBQL_ACCESS_TOKEN: ${{ github.event.inputs.subqlAccessToken }}
-
