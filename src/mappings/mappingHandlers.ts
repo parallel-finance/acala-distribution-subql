@@ -18,7 +18,6 @@ function isDistribution(from: string): boolean {
 
 function isClaim(to: string): boolean {
     return DISTRIBUTION === to
-    // return CLAIMS.includes(from)
 }
 
 async function handleTotalClaimed(to: string, amount: string, block: number): Promise<void> {
@@ -107,7 +106,6 @@ export async function handleTransferEvent(event: SubstrateEvent): Promise<void> 
         
         // filter signer we don't care
         if (!isDistri && !isCla) {
-            // logger.warn(`ignore event: from[${from}] to[${to.toString()}]`)
             return
         }
         
