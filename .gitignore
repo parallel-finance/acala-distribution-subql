@@ -10,7 +10,6 @@ dist/
 .github
 
 # lock files
-yarn.lock
 package-lock.json
 
 # Compiled Java class files
