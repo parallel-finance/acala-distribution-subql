@@ -26,5 +26,8 @@
   },
   "dependencies": {
     "dotenv": "^14.2.0"
+  },
+  "resolutions": {
+    "ipfs-unixfs": "6.0.6"
   }
 }
