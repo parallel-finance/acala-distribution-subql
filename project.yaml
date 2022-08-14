@@ -1,4 +1,4 @@
-specVersion: 0.2.0
+specVersion: 1.0.0
 name: acala-subql
 version: 1.0.0
 description: parallel acala reward transfer service
@@ -16,7 +16,7 @@ dataSources:
   - kind: substrate/Runtime
     # startBlock: 348696  # test
     # startBlock: 8000 # regnet
-    startBlock: 265500  # deploy
+    startBlock: 1604945  # deploy
     mapping:
       file: ./dist/index.js
       handlers:
