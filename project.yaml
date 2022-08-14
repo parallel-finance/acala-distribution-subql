@@ -10,7 +10,7 @@ network:
   # genesisHash: '0x5c562e6300954998233c9a40b6b86f3028977e6d32d0da1af207738d19f98c1b' # test
   # endpoint: wss://regnet-rpc.parallel.fi  # regenet
   # genesisHash: '0xa9c3b437a314688da50e4330b567cf6fea14e5b7b72099b4f81a8100a6fccd0f' # regnet
-  endpoint: wss://acala-polkadot-rpc.parallel.fi  # deploy
+  endpoint: wss://acala-rpc-0.aca-api.network  # deploy
   genesisHash: '0xfc41b9bd8ef8fe53d58c7ea67c794c7ec9a73daf05e6d54b14ff6342c99ba64c' # deploy
 dataSources:
   - kind: substrate/Runtime
