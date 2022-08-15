@@ -21,7 +21,6 @@ function isClaim(to: string): boolean {
 }
 
 async function handleTotalClaimed(to: string, amount: string, block: number): Promise<void> {
-    logger.info(`handle total claim from[${to}] amount[${amount}] at block[${block}]`)
     try {
         let record = await TotalClaim.get(to)
         if (record === undefined) {
@@ -40,7 +39,6 @@ async function handleTotalClaimed(to: string, amount: string, block: number): Pr
 }
 
 async function handleTotalDistributed(from: string, amount: string, block: number): Promise<void> {
-    logger.info(`handle total distribution to[${from}] amount[${amount}] at block[${block}]`)
     try {
         let record = await TotalDistribution.get(from)
         if (record === undefined) {
