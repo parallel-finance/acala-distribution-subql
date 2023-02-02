@@ -83,9 +83,9 @@ export async function handleTransferEvent(event: SubstrateEvent): Promise<void> 
     const isCla = isClaim(to)
 
     // filter signer we don't care
-    if (!isDistri && !isCla) { 
+    if (!isDistri && !isCla) {
         // logger.warn(`ignore event: from[${from}] to[${to.toString()}]`)
-        return 
+        return
     }
     const tx: Tx = {
         id: event.extrinsic.extrinsic.hash.toString(),
