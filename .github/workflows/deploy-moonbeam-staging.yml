@@ -21,15 +21,14 @@ jobs:
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org
-          cache: 'yarn'
 
       - name: Install dependencies
-        run: yarn
+        run: npm install -g pnpm && pnpm install
 
       - name: Generate schema type
-        run: yarn codegen
+        run: pnpm codegen
 
       - name: Publish to IPFS
-        run: yarn ipfs:publish -f moonbeam-staging.yaml
+        run: pnpm build && pnpm ipfs:publish -f moonbeam-staging.yaml
         env:
           SUBQL_ACCESS_TOKEN: ${{ github.event.inputs.subqlAccessToken }}
