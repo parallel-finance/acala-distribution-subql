@@ -2,8 +2,9 @@ version: "3"
 
 services:
   postgres:
-    image: postgres:14
-    container_name: postgres14
+    build:
+      context: .
+      dockerfile: ./docker/pg-Dockerfile
     ports:
       - 5432:5432
     volumes:
@@ -13,12 +14,11 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
-      timeout: 5s
+      timeout: 15s
       retries: 5
 
   subquery-node:
-    image: onfinality/subql-node:v0.27.2
-    container_name: subql-node-0272
+    image: onfinality/subql-node:latest
     depends_on:
       "postgres":
         condition: service_healthy
@@ -34,15 +34,15 @@ services:
     command:
       - -f=/app
       - --db-schema=app
+      - --disable-historical=false
     healthcheck:
       test: ["CMD", "curl", "-f", "http://subquery-node:3000/ready"]
       interval: 3s
-      timeout: 15s
+      timeout: 5s
       retries: 10
 
   graphql-engine:
-    image: onfinality/subql-query:v0.11.0
-    container_name: subql-0110
+    image: onfinality/subql-query:latest
     ports:
       - 3000:3000
     depends_on:
